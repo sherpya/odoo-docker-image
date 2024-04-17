@@ -1,0 +1,6 @@
+python-ldap ; sys_platform == 'none'
+libsass ; sys_platform == 'none'
+psycopg2 ; sys_platform == 'none'
+psutil ; sys_platform == 'none'
+num2words==0.5.13
+XlsxWriter==3.2.0

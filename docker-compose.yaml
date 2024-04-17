@@ -1,0 +1,30 @@
+services:
+  odoo:
+    restart: on-failure
+    build: .
+    ports:
+      - "8069:8069"
+      - "8070:8070"
+    links:
+      - postgres:postgres
+    volumes:
+      - odoo-data:/odoo/data
+      - ./addons:/mnt/extra-addons
+    env_file:
+      - .env.docker
+
+  postgres:
+    restart: on-failure
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=template1
+
+volumes:
+  odoo-data:
+  pgdata:
