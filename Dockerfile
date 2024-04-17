@@ -34,7 +34,7 @@ RUN \
     && chmod 755 /usr/local/bin/wkhtmltopdf \
     && curl -o libssl1.deb -sSL http://security.debian.org/pool/main/o/openssl/libssl1.1_1.1.1n-0+deb10u6_${TARGETARCH}.deb \
     && echo "${LIBSSL1_SHA} libssl1.deb" | sha1sum -c - \
-    && dpkg -i ./libssl1.deb \
+    && DEBIAN_FRONTEND=noninteractive dpkg -i ./libssl1.deb \
     && rm -fr /var/lib/apt/lists/* wkhtmltox.deb libssl1.deb
 
 ENV PYTHONDONTWRITEBYTECODE 1
