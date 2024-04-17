@@ -17,7 +17,7 @@ if [ -z ${ODOO_ADMIN_PASSWD} ]; then
     echo "Admin password is unset! A temporary random one will used: ${ODOO_ADMIN_PASSWD}"
 fi
 
-ODOO_ADDONS_PATH="/odoo/app/addons,/odoo/app/odoo/addons,/mnt/extra-addons"
+ODOO_ADDONS_PATH="/odoo/source/addons,/odoo/source/odoo/addons,/mnt/extra-addons"
 for dir in /odoo/addons/*; do
     if [ -d ${dir} ]; then
         ODOO_ADDONS_PATH="${ODOO_ADDONS_PATH},${dir}"

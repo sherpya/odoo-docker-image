@@ -9,7 +9,6 @@ services:
       - postgres:postgres
     volumes:
       - odoo-data:/odoo/data
-      - ./addons:/mnt/extra-addons
     environment:
       - ODOO_DB_USER=odoo
       - ODOO_DB_PASSWORD=odoo

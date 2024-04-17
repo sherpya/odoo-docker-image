@@ -2,8 +2,6 @@ FROM debian:bookworm-slim
 
 LABEL org.opencontainers.image.authors="sherpya@gmail.com"
 
-SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
-
 ENV LANG C.UTF-8
 
 ARG TARGETARCH
@@ -38,19 +36,23 @@ RUN \
     && rm -fr /var/lib/apt/lists/* wkhtmltox.deb libssl1.deb
 
 ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
 
 RUN useradd -ms /bin/bash odoo
 
-WORKDIR /odoo/app
-COPY --chown=odoo:odoo ./odoo ./
-COPY --chown=odoo:odoo ./override.txt ./
+WORKDIR /odoo/source
 
-RUN install -d -o odoo -g odoo /odoo/data /odoo/addons
+# Copy odoo
+COPY --chown=odoo:odoo odoo /odoo/source
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-RUN $HOME/.cargo/bin/uv -n pip install --system --break-system-packages --override override.txt -r requirements.txt psycopg2-binary
+# Copy addons
+COPY --chown=odoo:odoo addons /odoo/addons/
 
+# Install dependencies
+COPY setup /setup
+RUN sh /setup/setup.sh && rm -fr /setup
+
+# Setup data dir mount point
+RUN install -d -o odoo -g odoo /odoo/data
 COPY ./entrypoint.sh /
 
 USER odoo
