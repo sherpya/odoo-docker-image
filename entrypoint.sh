@@ -20,7 +20,7 @@ fi
 
 if [ -z ${ODOO_ADMIN_PASSWD} ]; then
     ODOO_ADMIN_PASSWD=$(tr -dc 'A-Za-z0-9!?%=' < /dev/urandom | head -c 10)
-    echo "${YELLOW}Odoo admin password is unset! A temporary random one will used: ${RED}${ODOO_ADMIN_PASSWD}${NC}"
+    echo "${YELLOW}Odoo admin password is unset! This temporary random password will used: ${RED}${ODOO_ADMIN_PASSWD}${NC}"
 fi
 
 ODOO_ADDONS_PATH="/odoo/source/addons,/odoo/source/odoo/addons,/mnt/extra-addons"
