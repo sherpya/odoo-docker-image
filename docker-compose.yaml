@@ -12,6 +12,9 @@ services:
       - postgres:postgres
     volumes:
       - odoo-data:/odoo/data
+    env_file:
+      - path: .env
+        required: false
     environment:
       - ODOO_DB_USER=odoo
       - ODOO_DB_PASSWORD=odoo
