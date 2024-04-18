@@ -12,6 +12,7 @@ services:
       - postgres:postgres
     volumes:
       - odoo-data:/odoo/data
+      - ./extra-addons:/mnt/extra-addons
     env_file:
       - path: .env
         required: false
