@@ -17,7 +17,7 @@ RUN apt-get update \
     python3-ldap python3-libsass python3-psutil \
     && apt-get clean
 
-# Install required stuff
+# Install wkhtmltopdf
 RUN \
     if [ -z "${TARGETARCH}" ]; then \
         TARGETARCH="$(dpkg --print-architecture)"; \
