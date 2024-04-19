@@ -24,7 +24,7 @@ RUN apt-get update \
 
 # Install wkhtmltopdf
 RUN \
-    if [ -z "${TARGETARCH}" ]; then \
+    if [ -z "${TARGETARCH:=}" ]; then \
         TARGETARCH="$(dpkg --print-architecture)"; \
     fi; \
     case ${TARGETARCH} in \
