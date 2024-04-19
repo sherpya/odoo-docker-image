@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.authors="sherpya@gmail.com"
 
 ENV LANG C.UTF-8
 
+ARG TARGETARCH
 ARG WKHTMLTOPDF_DISTRO=bookworm
 ARG WKHTMLTOPDF_VERSION=0.12.6.1-3
 
