@@ -1,12 +1,16 @@
 FROM debian:bookworm-slim
 
 LABEL org.opencontainers.image.authors="sherpya@gmail.com"
+LABEL org.opencontainers.image.title="Odoo Docker Image"
+LABEL org.opencontainers.image.description="Docker image for Odoo based on Debian Bookworm with minimal packages."
 
 ENV LANG C.UTF-8
 
 ARG TARGETARCH
 ARG WKHTMLTOPDF_DISTRO=bookworm
 ARG WKHTMLTOPDF_VERSION=0.12.6.1-3
+
+SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
 # Upgrade packages & Dependencies
 # fonts-noto-cjk
