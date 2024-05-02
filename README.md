@@ -1,4 +1,4 @@
-# Improved Odoo Docker Image
+# Optimized Odoo Docker Image
 
 This project provides a Dockerfile and supporting scripts for creating customized and optimized
 Odoo images based on `debian:bookworm-slim`. It's designed to streamline the deployment
