@@ -54,7 +54,7 @@ sleep_time=1  # Initial sleep time in seconds
 max_sleep_time=60  # Maximum sleep time to prevent too long delays
 
 while true; do
-    if  PGPASSWORD=${ODOO_DB_PASSWORD} psql -h ${ODOO_DB_HOST} -p ${ODOO_DB_PORT} -U ${ODOO_DB_USER} -d template1 -c "SELECT 1" > /dev/null 2>&1; then
+    if  PGPASSWORD=${ODOO_DB_PASSWORD} psql -h ${ODOO_DB_HOST} -p ${ODOO_DB_PORT} -U ${ODOO_DB_USER} -d template1 -c "SELECT 1" > /dev/null; then
         echo "Database is up and running"
         break;
     else
