@@ -16,6 +16,12 @@ The image supports both `amd64` and `arm64` platforms.
 Before you can use this Docker image, ensure you have Docker installed on your machine.
 If you plan to use Docker Compose, that should also be installed.
 
+## Supported Odoo Versions
+
+Only Odoo version 16.0 and 14.0 are supported, 14.0 needs to be built using Debian Bullseye instead of Bookworm.
+To build an image compatible with odoo 14.0, you should add `--build-arg DISTRO=bullseye`
+to your build command.
+
 ## Getting Started
 
 1. **Clone Odoo Repository**: First, you need to clone the Odoo repository into a local directory

@@ -1,6 +1,13 @@
+# never install psycopg2
+psycopg2 ; sys_platform == 'none'
+
+# optional libraries
+num2words
+
+# installed using platform package manager
 python-ldap ; sys_platform == 'none'
 libsass ; sys_platform == 'none'
-psycopg2 ; sys_platform == 'none'
 psutil ; sys_platform == 'none'
-num2words==0.5.13
-XlsxWriter==3.2.0
+
+# odoo 16.0 on bookworm: python 3.11
+XlsxWriter==3.2.0; python_version >= '3.11'

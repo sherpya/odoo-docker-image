@@ -1,38 +1,43 @@
-FROM debian:bookworm-slim
+ARG DISTRO=bookworm
+FROM debian:${DISTRO}-slim
 
 LABEL org.opencontainers.image.authors="sherpya@gmail.com"
 LABEL org.opencontainers.image.title="Odoo Docker Image"
-LABEL org.opencontainers.image.description="Docker image for Odoo based on Debian Bookworm with minimal packages."
+LABEL org.opencontainers.image.description="Docker image for Odoo based on latest Debian with minimal packages."
 
 ENV LANG C.UTF-8
-
-ARG TARGETARCH
-ARG WKHTMLTOPDF_DISTRO=bookworm
-ARG WKHTMLTOPDF_VERSION=0.12.6.1-3
 
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
 # Upgrade packages & Dependencies
-# fonts-noto-cjk
+# add fonts-noto-cjk for CJK support
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     curl ca-certificates postgresql-client \
     libjpeg62-turbo libpng16-16 libxrender1 libfontconfig1 \
-    python3-ldap python3-libsass python3-psutil \
+    python3-pip python3-ldap python3-libsass python3-psutil \
     && apt-get clean
+
+ARG TARGETARCH
+
+ARG WKHTMLTOPDF_VERSION=0.12.6.1-3
+
+ARG WKHTMLTOPDF_SHA_amd64_bookworm=e9f95436298c77cc9406bd4bbd242f4771d0a4b2
+ARG WKHTMLTOPDF_SHA_arm64_bookworm=77bc06be5e543510140e6728e11b7c22504080d4
+
+ARG WKHTMLTOPDF_SHA_amd64_bullseye=9df8dd7b1e99782f1cfa19aca665969bbd9cc159
+ARG WKHTMLTOPDF_SHA_arm64_bullseye=58c84db46b11ba0e14abb77a32324b1c257f1f22
 
 # Install wkhtmltopdf
 RUN \
     if [ -z "${TARGETARCH:=}" ]; then \
         TARGETARCH="$(dpkg --print-architecture)"; \
     fi; \
-    case ${TARGETARCH} in \
-        "amd64") WKHTMLTOPDF_SHA=e9f95436298c77cc9406bd4bbd242f4771d0a4b2 ;; \
-        "arm64") WKHTMLTOPDF_SHA=77bc06be5e543510140e6728e11b7c22504080d4 ;; \
-        *) { echo "Unsupported architecture"; exit 1; } ;; \
-    esac \
-    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.${WKHTMLTOPDF_DISTRO}_${TARGETARCH}.deb \
+    DISTRO=$(source /etc/os-release && echo $VERSION_CODENAME) \
+    && eval "WKHTMLTOPDF_SHA=\$WKHTMLTOPDF_SHA_${TARGETARCH}_${DISTRO}" \
+    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.${DISTRO}_${TARGETARCH}.deb \
+    && sha1sum wkhtmltox.deb \
     && echo "${WKHTMLTOPDF_SHA} wkhtmltox.deb" | sha1sum -c - \
     && dpkg --fsys-tarfile wkhtmltox.deb | tar xOf - ./usr/local/bin/wkhtmltopdf > /usr/local/bin/wkhtmltopdf \
     && chmod 755 /usr/local/bin/wkhtmltopdf \
