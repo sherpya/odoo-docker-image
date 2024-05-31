@@ -50,6 +50,9 @@ RUN useradd -ms /bin/bash odoo
 
 WORKDIR /odoo/source
 
+# Copy manifest if present
+COPY --chown=odoo:odoo manifest.tx[t] /odoo/
+
 # Copy odoo
 COPY --chown=odoo:odoo odoo /odoo/source
 
