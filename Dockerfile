@@ -18,7 +18,7 @@ RUN apt-get update \
     curl ca-certificates postgresql-client \
     libjpeg62-turbo libpng16-16 libxrender1 libfontconfig1 \
     python3-pip python3-ldap python3-libsass python3-psutil \
-    && apt-get clean
+    && apt-get clean && rm -fr /var/lib/apt/lists/*
 
 ARG TARGETARCH
 
