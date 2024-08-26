@@ -38,7 +38,6 @@ RUN \
     DISTRO=$(source /etc/os-release && echo $VERSION_CODENAME) \
     && eval "WKHTMLTOPDF_SHA=\$WKHTMLTOPDF_SHA_${TARGETARCH}_${DISTRO}" \
     && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.${DISTRO}_${TARGETARCH}.deb \
-    && sha1sum wkhtmltox.deb \
     && echo "${WKHTMLTOPDF_SHA} wkhtmltox.deb" | sha1sum -c - \
     && dpkg --fsys-tarfile wkhtmltox.deb | tar xOf - ./usr/local/bin/wkhtmltopdf > /usr/local/bin/wkhtmltopdf \
     && chmod 755 /usr/local/bin/wkhtmltopdf \
