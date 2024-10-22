@@ -22,6 +22,11 @@ Only Odoo version 16.0 and 14.0 are supported, 14.0 needs to be built using Debi
 To build an image compatible with odoo 14.0, you should add `--build-arg DISTRO=bullseye`
 to your build command.
 
+## Setting TimeZone
+
+The image is preconfigured to setup Linux TimeZone to `Europe/Rome` (since I'm italian).
+You can override this setting by adding e.g. `--build-arg TIMEZONE=Europe/Berlin`.
+
 ## Getting Started
 
 1. **Clone Odoo Repository**: First, you need to clone the Odoo repository into a local directory

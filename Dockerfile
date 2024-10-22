@@ -5,6 +5,8 @@ LABEL org.opencontainers.image.authors="sherpya@gmail.com"
 LABEL org.opencontainers.image.title="Odoo Docker Image"
 LABEL org.opencontainers.image.description="Docker image for Odoo based on latest Debian with minimal packages."
 
+ARG TIMEZONE="Europe/Rome"
+
 ENV LANG C.UTF-8
 
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
@@ -18,6 +20,7 @@ RUN apt-get update \
     curl ca-certificates postgresql-client \
     libjpeg62-turbo libpng16-16 libxrender1 libfontconfig1 \
     python3-pip python3-ldap python3-libsass python3-psutil \
+    && echo -e "$(echo ${TIMEZONE} | sed -e 's,/,\n,')" | dpkg-reconfigure tzdata -f teletype \
     && apt-get clean && rm -fr /var/lib/apt/lists/*
 
 ARG TARGETARCH
