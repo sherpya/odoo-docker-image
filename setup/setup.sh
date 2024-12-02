@@ -22,7 +22,7 @@ for req in /setup/requirements.d/*.txt; do
 done
 
 # Install
-$HOME/.cargo/bin/uv -n pip install \
+$HOME/.local/bin/uv -n pip install \
     --system --break-system-packages \
     --override /setup/override.txt \
     -r requirements.txt \
