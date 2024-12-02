@@ -16,7 +16,7 @@ SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    procps netcat-traditional iputils-ping htop \
+    procps netcat-traditional iputils-ping htop iproute2 \
     curl ca-certificates postgresql-client \
     libjpeg62-turbo libpng16-16 libxrender1 libfontconfig1 \
     python3-pip python3-ldap python3-libsass python3-psutil \
