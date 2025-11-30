@@ -7,7 +7,7 @@ LABEL org.opencontainers.image.description="Docker image for Odoo based on lates
 
 ARG TIMEZONE="Europe/Rome"
 
-ENV LANG C.UTF-8
+ENV LANG=C.UTF-8
 
 SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
@@ -20,7 +20,8 @@ RUN apt-get update \
     curl ca-certificates postgresql-client \
     libjpeg62-turbo libpng16-16 libxrender1 libfontconfig1 \
     python3-pip python3-ldap python3-libsass python3-psutil \
-    && echo -e "$(echo ${TIMEZONE} | sed -e 's,/,\n,')" | dpkg-reconfigure tzdata -f teletype \
+    && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo "${TIMEZONE}" > /etc/timezone \
+    && dpkg-reconfigure -f noninteractive tzdata \
     && apt-get clean && rm -fr /var/lib/apt/lists/*
 
 ARG TARGETARCH
@@ -38,7 +39,7 @@ RUN \
     if [ -z "${TARGETARCH:=}" ]; then \
         TARGETARCH="$(dpkg --print-architecture)"; \
     fi; \
-    DISTRO=$(source /etc/os-release && echo $VERSION_CODENAME) \
+    DISTRO=$(source /etc/os-release && echo $VERSION_CODENAME | sed -e 's/trixie/bookworm/g') \
     && eval "WKHTMLTOPDF_SHA=\$WKHTMLTOPDF_SHA_${TARGETARCH}_${DISTRO}" \
     && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}.${DISTRO}_${TARGETARCH}.deb \
     && echo "${WKHTMLTOPDF_SHA} wkhtmltox.deb" | sha1sum -c - \
@@ -46,7 +47,7 @@ RUN \
     && chmod 755 /usr/local/bin/wkhtmltopdf \
     && rm -fr /var/lib/apt/lists/* wkhtmltox.deb
 
-ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONDONTWRITEBYTECODE=1
 
 RUN useradd -ms /bin/bash odoo
 
