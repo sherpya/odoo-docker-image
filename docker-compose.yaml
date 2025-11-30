@@ -1,36 +1,45 @@
 services:
-  web:
-    tty: true
-    restart: on-failure
-    build: .
+  odoo:
+    image: 'registry.gitlab.com/sherpya/odoo-docker-image:16.0-l10n-italy-latest'
+    # build: .
+    # ports:
+    #  - '8069:8069'
+    pull_policy: always
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8069/web/database/selector"]
     depends_on:
       - postgres
-    ports:
-      - "8069:8069"
-      - "8070:8070"
-    links:
-      - postgres:postgres
+    restart: unless-stopped
     volumes:
-      - odoo-data:/odoo/data
+      - odoo_data:/odoo/data
       - ./extra-addons:/mnt/extra-addons
     env_file:
       - path: .env
         required: false
     environment:
-      - ODOO_DB_USER=odoo
-      - ODOO_DB_PASSWORD=odoo
+      - SERVICE_FQDN_ODOO_8069
       - ODOO_DB_HOST=postgres
+      - ODOO_DB_USER=odoo
+      - 'ODOO_LIST_DB=${ODOO_LIST_DB}'
+      - 'ODOO_DB_FILTER=${ODOO_DB_FILTER}'
+      - 'ODOO_DB_PASSWORD=${SERVICE_PASSWORD_POSTGRES}'
+      - 'ODOO_ADMIN_PASSWD=${ODOO_ADMIN_PASSWD}'
   postgres:
-    restart: on-failure
-    image: postgres:15
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+    image: postgres:17.7
     environment:
       - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo
-      - POSTGRES_DB=template1
+      - 'POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U odoo -d postgres" ]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 5
+    restart: unless-stopped
+    volumes:
+      - 'postgres_data:/var/lib/postgresql/data'
+    expose:
+      - 5432
 volumes:
-  odoo-data:
-  pgdata:
+  odoo_data: null
+  postgres_data: null
