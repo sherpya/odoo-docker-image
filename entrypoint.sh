@@ -37,6 +37,8 @@ ODOO_MAX_CRON_THREADS=${ODOO_MAX_CRON_THREADS:=1}
 ODOO_DATA_DIR=${ODOO_DATA_DIR:=/odoo/data}
 ODOO_PROXY_MODE=${ODOO_PROXY_MODE:=True}
 
+test -e /odoo/manifest.txt && ( echo "Odoo & Addons Version:" ; cat /odoo/manifest.txt ; echo )
+
 echo "Generating Odoo configuration..."
 
 (
