@@ -13,15 +13,20 @@ SHELL ["/bin/bash", "-o", "errexit", "-o", "nounset", "-o", "pipefail", "-c"]
 
 # Upgrade packages & Dependencies
 # add fonts-noto-cjk for CJK support
-RUN apt-get update \
+RUN \
+    apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get -y upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     procps netcat-traditional iputils-ping htop iproute2 \
-    curl ca-certificates postgresql-client \
+    curl ca-certificates \
     libjpeg62-turbo libpng16-16 libxrender1 libfontconfig1 \
     python3-pip python3-ldap python3-libsass python3-psutil \
     && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo "${TIMEZONE}" > /etc/timezone \
     && dpkg-reconfigure -f noninteractive tzdata \
+    && DISTRO=$(source /etc/os-release && echo $VERSION_CODENAME | sed -e 's/trixie/bookworm/g') \
+    && echo "deb [signed-by=/etc/apt/trusted.gpg.d/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${DISTRO}-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && curl -o /etc/apt/trusted.gpg.d/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+    && apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends postgresql-client-17 \
     && apt-get clean && rm -fr /var/lib/apt/lists/*
 
 ARG TARGETARCH
