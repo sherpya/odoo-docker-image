@@ -10,4 +10,7 @@ libsass ; sys_platform == 'none'
 psutil ; sys_platform == 'none'
 
 # odoo 16.0 on bookworm: python 3.11
-XlsxWriter==3.2.0; python_version >= '3.11'
+XlsxWriter==3.2.0 ; python_version >= '3.11'
+
+# odoo 18.0 on trixie: python 3.13
+lxml==5.4.0 ; python_version >= '3.13'

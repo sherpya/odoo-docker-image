@@ -1,6 +1,6 @@
 services:
   odoo:
-    image: 'registry.gitlab.com/sherpya/odoo-docker-image:16.0-l10n-italy-latest'
+    image: 'registry.gitlab.com/sherpya/odoo-docker-image:18.0-l10n-italy-latest'
     # build: .
     # ports:
     #  - '8069:8069'

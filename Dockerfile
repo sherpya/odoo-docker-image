@@ -1,4 +1,4 @@
-ARG DISTRO=bookworm
+ARG DISTRO=trixie
 FROM debian:${DISTRO}-slim
 
 LABEL org.opencontainers.image.authors="sherpya@gmail.com"
